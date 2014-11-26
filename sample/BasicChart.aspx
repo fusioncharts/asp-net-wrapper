@@ -8,6 +8,9 @@
     <script type="text/javascript" src="fusioncharts/fusioncharts.js"></script>
 </head>
 <body>
-    <asp:Literal ID="Literal1" runat="server"></asp:Literal>                
+    <asp:Literal ID="Literal1" runat="server"></asp:Literal>     
+    <asp:Literal ID="Literal2" runat="server"></asp:Literal>     
+    <asp:Literal ID="Literal3" runat="server"></asp:Literal>     
+    <asp:Literal ID="Literal4" runat="server"></asp:Literal>                
 </body>
 </html>

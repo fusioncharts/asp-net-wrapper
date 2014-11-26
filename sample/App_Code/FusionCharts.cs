@@ -14,23 +14,23 @@ namespace FusionCharts.Charts
     /// @version: v3.6
     /// 
     /// </summary>
-    public class Chart
+    public class Chart: ICloneable
     {
         private Hashtable __CONFIG__ = null;
+        private static Hashtable __PARAMMAP__ = null;
 
         public enum ChartParameter
         {
-            type,
-            id,
-            width,
-            height,
+            chartType,
+            chartId,
+            chartWidth,
+            chartHeight,
             dataFormat,
             dataSource,
             renderAt,
-            containerBackgroundColor,
-            containerBackgroundOpacity
+            bgColor,
+            bgOpacity
         }
-
 
         #region constractor methods
         /// <summary>
@@ -41,6 +41,23 @@ namespace FusionCharts.Charts
             __INIT();
         }
 
+        private void SetParamsMap()
+        {
+            if (__PARAMMAP__ == null)
+            {
+                __PARAMMAP__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+                __PARAMMAP__["chartType"] = "type";
+                __PARAMMAP__["chartId"] = "id";
+                __PARAMMAP__["chartWidth"] = "width";
+                __PARAMMAP__["chartHeight"] = "height";
+                __PARAMMAP__["dataFormat"] = "dataFormat";
+                __PARAMMAP__["dataSource"] = "dataSource";
+                __PARAMMAP__["renderAt"] = "renderAt";
+                __PARAMMAP__["bgColor"] = "containerBackgroundColor";
+                __PARAMMAP__["bgOpacity"] = "containerBackgroundOpacity";
+            }
+ 
+        }
 
         /// <param name="chartType">The type of chart that you intend to plot</param>
         public Chart(string chartType)
@@ -187,7 +204,7 @@ namespace FusionCharts.Charts
             // if the user has provided renderAt then assume that the HTML container is already present in the page.
             if (renderAt.Trim().Length == 0)
             {
-                renderAt = chartId + "_Div";
+                renderAt = chartId + "_div";
                 // Now create the container div also.
                 builder.AppendFormat("<div id='{0}' >" + Environment.NewLine, renderAt);
                 builder.Append("Chart..." + Environment.NewLine);
@@ -211,6 +228,15 @@ namespace FusionCharts.Charts
         #endregion
 
         #region Public Methods
+
+        public object Clone()
+        {
+            Chart ChartClone = new Chart();
+            ChartClone.__CONFIG__ = (Hashtable)this.__CONFIG__.Clone();
+            ChartClone.SetChartParameter("id", ((Hashtable)ChartClone.__CONFIG__["params"])["id"].ToString() + "_clone");
+
+            return ChartClone;
+        }
 
         /// <summary>
         /// Public method to generate html code for rendering chart
@@ -262,8 +288,11 @@ namespace FusionCharts.Charts
         /// <param name="value">Value of configuration</param>
         public void SetChartParameter(ChartParameter param, object value)
         {
-            SetChartParameter(param.ToString(), value);
+
+            SetChartParameter(__PARAMMAP__[param.ToString()].ToString(), value);
         }
+
+
 
         /// <summary>
         /// This method set the data for the chart
@@ -310,20 +339,21 @@ namespace FusionCharts.Charts
         private void __INIT()
         {
             __CONFIG__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-                Hashtable param = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-                param["type"] = "";
-                param["width"] = "";
-                param["height"] = "";
-                param["renderAt"] = "";
-                param["dataSource"] = "";
-                param["dataFormat"] = "";
-                param["id"] = "";
-                param["containerBackgroundColor"] = "";
-                param["containerBackgroundOpacity"] = "";
+            Hashtable param = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+            param["type"] = "";
+            param["width"] = "";
+            param["height"] = "";
+            param["renderAt"] = "";
+            param["dataSource"] = "";
+            param["dataFormat"] = "";
+            param["id"] = Guid.NewGuid().ToString().Replace("-", "_");
+            param["containerBackgroundColor"] = "";
+            param["containerBackgroundOpacity"] = "";
 
-                __CONFIG__["params"] = param;
+            __CONFIG__["params"] = param;
 
-                param = null;
+            param = null;
+            SetParamsMap();
         }
 
         
@@ -368,7 +398,7 @@ namespace FusionCharts.Charts
                 }
                 else if (ds.Key.ToString().Equals("renderAt"))
                 {
-                    strjson = strjson + Environment.NewLine + "\"renderAt\" : \"" + ((Hashtable)json)["id"].ToString() + "_Div\", ";
+                    strjson = strjson + Environment.NewLine + "\"renderAt\" : \"" + ((Hashtable)json)["id"].ToString() + "_div\", ";
                 }
             }
             // remove ending comma
@@ -392,6 +422,7 @@ namespace FusionCharts.Charts
         }
 
         #endregion
+
     }
 }
 
