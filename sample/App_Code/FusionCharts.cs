@@ -9,16 +9,16 @@ using System.Globalization;
 namespace FusionCharts.Charts
 {
     /// <summary>
-    /// Contains static methods to render FusionCharts in the Page.
-    /// 
-    /// @version: v3.6
-    /// 
+    /// Contains static methods to render FusionCharts in the Page. 
     /// </summary>
     public class Chart: ICloneable
     {
         private Hashtable __CONFIG__ = null;
         private static Hashtable __PARAMMAP__ = null;
 
+        /// <summary>
+        /// User configurable chart parameter list 
+        /// </summary>
         public enum ChartParameter
         {
             chartType,
@@ -34,30 +34,14 @@ namespace FusionCharts.Charts
 
         #region constractor methods
         /// <summary>
-        /// 
+        /// Chart constractor
+        /// Chart configuration parameters can be supplyed to the constractor also.
         /// </summary>
         public Chart()
         {
             __INIT();
         }
 
-        private void SetParamsMap()
-        {
-            if (__PARAMMAP__ == null)
-            {
-                __PARAMMAP__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-                __PARAMMAP__["chartType"] = "type";
-                __PARAMMAP__["chartId"] = "id";
-                __PARAMMAP__["chartWidth"] = "width";
-                __PARAMMAP__["chartHeight"] = "height";
-                __PARAMMAP__["dataFormat"] = "dataFormat";
-                __PARAMMAP__["dataSource"] = "dataSource";
-                __PARAMMAP__["renderAt"] = "renderAt";
-                __PARAMMAP__["bgColor"] = "containerBackgroundColor";
-                __PARAMMAP__["bgOpacity"] = "containerBackgroundOpacity";
-            }
- 
-        }
 
         /// <param name="chartType">The type of chart that you intend to plot</param>
         public Chart(string chartType)
@@ -228,7 +212,10 @@ namespace FusionCharts.Charts
         #endregion
 
         #region Public Methods
-
+        /// <summary>
+        /// Public method to clone an exiting FusionCharts instance
+        /// To make the chartId unic, this function will add "_clone" as suffix in the clone chart's chartID.
+        /// </summary>
         public object Clone()
         {
             Chart ChartClone = new Chart();
@@ -242,8 +229,99 @@ namespace FusionCharts.Charts
         /// Public method to generate html code for rendering chart
         /// This function assumes that you've already included the FusionCharts JavaScript class in your page
         /// </summary>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
         public string Render()
         {
+            return RenderChartALL();
+        }
+
+        /// <summary>
+        /// Public method to generate html code for rendering chart
+        /// This function assumes that you've already included the FusionCharts JavaScript class in your page
+        /// </summary>
+        /// <param name="chartType">The type of chart that you intend to plot</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
+        public string Render(string chartType)
+        {
+            SetChartParameter("type", chartType);
+
+            return RenderChartALL();
+        }
+
+        /// <summary>
+        /// Public method to generate html code for rendering chart
+        /// This function assumes that you've already included the FusionCharts JavaScript class in your page
+        /// </summary>
+        /// <param name="chartType">The type of chart that you intend to plot</param>
+        /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
+        public string Render(string chartType, string chartId)
+        {
+            SetChartParameter("type", chartType);
+            SetChartParameter("id", chartId);
+
+            return RenderChartALL();
+        }
+
+        /// <summary>
+        /// Public method to generate html code for rendering chart
+        /// This function assumes that you've already included the FusionCharts JavaScript class in your page
+        /// </summary>
+        /// <param name="chartType">The type of chart that you intend to plot</param>
+        /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
+        /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
+        public string Render(string chartType, string chartId, string chartWidth)
+        {
+            SetChartParameter("type", chartType);
+            SetChartParameter("id", chartId);
+            SetChartParameter("width", chartWidth);
+
+            return RenderChartALL();
+        }
+
+        /// <summary>
+        /// Public method to generate html code for rendering chart
+        /// This function assumes that you've already included the FusionCharts JavaScript class in your page
+        /// </summary>
+        /// <param name="chartType">The type of chart that you intend to plot</param>
+        /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
+        /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
+        /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
+        public string Render(string chartType, string chartId, string chartWidth, string chartHeight)
+        {
+            SetChartParameter("type", chartType);
+            SetChartParameter("id", chartId);
+            SetChartParameter("width", chartWidth);
+            SetChartParameter("height", chartHeight);
+
+            return RenderChartALL();
+        }
+
+        /// <summary>
+        /// Public method to generate html code for rendering chart
+        /// This function assumes that you've already included the FusionCharts JavaScript class in your page
+        /// </summary>
+        /// <param name="chartType">The type of chart that you intend to plot</param>
+        /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
+        /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
+        /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
+        /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
+        public string Render(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat)
+        {
+            SetChartParameter("type", chartType);
+            SetChartParameter("dataFormat", dataFormat);
+            SetChartParameter("id", chartId);
+            SetChartParameter("width", chartWidth);
+            SetChartParameter("height", chartHeight);
+
             return RenderChartALL();
         }
 
@@ -257,8 +335,63 @@ namespace FusionCharts.Charts
         /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
         /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
         /// <param name="dataSource">Data for the chart</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
+        public string Render(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, string dataSource)
+        {
+            SetChartParameter("type", chartType);
+            SetChartParameter("dataFormat", dataFormat);
+            SetData(dataSource);
+            SetChartParameter("id", chartId);
+            SetChartParameter("width", chartWidth);
+            SetChartParameter("height", chartHeight);
+
+            return RenderChartALL();
+        }
+
+
+        /// <summary>
+        /// Public method to generate html code for rendering chart
+        /// This function assumes that you've already included the FusionCharts JavaScript class in your page
+        /// </summary>
+        /// <param name="chartType">The type of chart that you intend to plot</param>
+        /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
+        /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
+        /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
+        /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
+        /// <param name="dataSource">Data for the chart</param>
+        /// <param name="bgColor">Back-ground-color of the chart container</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
+        public string Render(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, string dataSource,
+            string bgColor)
+        {
+            SetChartParameter("type", chartType);
+            SetChartParameter("dataFormat", dataFormat);
+            SetData(dataSource);
+            SetChartParameter("id", chartId);
+            SetChartParameter("width", chartWidth);
+            SetChartParameter("height", chartHeight);
+            SetChartParameter("containerBackgroundColor", bgColor);
+
+            return RenderChartALL();
+        }
+
+
+        /// <summary>
+        /// Public method to generate html code for rendering chart
+        /// This function assumes that you've already included the FusionCharts JavaScript class in your page
+        /// </summary>
+        /// <param name="chartType">The type of chart that you intend to plot</param>
+        /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
+        /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
+        /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
+        /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
+        /// <param name="dataSource">Data for the chart</param>
         /// <param name="bgColor">Back-ground-color of the chart container</param>
         /// <param name="bgOpacity">Back-ground-opacity of the chart container</param>
+        /// <returns>JavaScript + HTML code required to embed a chart</returns>
+
         public string Render(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, string dataSource,
             string bgColor, string bgOpacity)
         {
@@ -279,10 +412,7 @@ namespace FusionCharts.Charts
         
 
         /// <summary>
-        /// SetChartParameter sets various configurations of FusionCharts
-        /// It takes configuration names as first parameter and its value a second parameter
-        /// There are config groups which can contain common configuration names. All config names in all groups gets set with this value
-        /// unless group is specified explicitly
+        /// SetChartParameter sets various configurations of a FusionCharts instance
         /// </summary>
         /// <param name="param">Name of chart parameter</param>
         /// <param name="value">Value of configuration</param>
@@ -292,25 +422,36 @@ namespace FusionCharts.Charts
             SetChartParameter(__PARAMMAP__[param.ToString()].ToString(), value);
         }
 
+        /// <summary>
+        /// GetChartParameter returns the value of a parameter of a FusionCharts instance
+        /// </summary>
+        /// <param name="param">Name of chart parameter</param>
 
+        private string GetChartParameter(ChartParameter param)
+        {
+            return GetChartParameter(__PARAMMAP__[param.ToString()].ToString());
+        }
 
         /// <summary>
-        /// This method set the data for the chart
+        /// This method to set the data for the chart
         /// </summary>
-        /// <param name="setting">Name of configuration</param>
-        /// <param name="value">Value of configuration</param>
-        
+        /// <param name="dataSource">Data for the chart</param>
+
         public void SetData(string dataSource)
         {
-            // Remove new line char from the dataSource
-            dataSource.Replace("\n\r", "");
-            // detect if non-JSON format then wrap with quot '"'
-            if (!(dataSource.StartsWith("{") && dataSource.EndsWith("}")))
-            {
-                 dataSource = "\"" + dataSource + "\"";
-            }
-            
             SetChartParameter("dataSource", dataSource);
+        }
+
+        /// <summary>
+        /// This method to set the data for the chart
+        /// </summary>
+        /// <param name="dataSource">Data for the chart</param>
+        /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
+
+        public void SetData(string dataSource, string dataFormat)
+        {
+            SetChartParameter("dataSource", dataSource);
+            SetChartParameter("dataFormat", dataSource);
         }
 
         #endregion
@@ -335,6 +476,24 @@ namespace FusionCharts.Charts
             }
         }
 
+        
+        private void SetParamsMap()
+        {
+            if (__PARAMMAP__ == null)
+            {
+                __PARAMMAP__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+                __PARAMMAP__["chartType"] = "type";
+                __PARAMMAP__["chartId"] = "id";
+                __PARAMMAP__["chartWidth"] = "width";
+                __PARAMMAP__["chartHeight"] = "height";
+                __PARAMMAP__["dataFormat"] = "dataFormat";
+                __PARAMMAP__["dataSource"] = "dataSource";
+                __PARAMMAP__["renderAt"] = "renderAt";
+                __PARAMMAP__["bgColor"] = "containerBackgroundColor";
+                __PARAMMAP__["bgOpacity"] = "containerBackgroundOpacity";
+            }
+
+        }
 
         private void __INIT()
         {
@@ -390,8 +549,17 @@ namespace FusionCharts.Charts
                     Key = ds.Key.ToString();
                     Value = ds.Value.ToString();
                     // If this is not the dataSource then convert the value as JavaScript string
-                    if (!Key.ToLower().Equals("datasource"))
+                    if (Key.ToLower().Equals("datasource"))
                     {
+                        // Remove new line char from the dataSource
+                        Value.Replace("\n\r", "");
+                        // detect if non-JSON format then wrap with quot '"'
+                        if (!(Value.StartsWith("{") && Value.EndsWith("}")))
+                        {
+                            Value = "\"" + Value + "\"";
+                        }
+                    }
+                    else {
                         Value = "\"" + Value + "\"";
                     }
                     strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
