@@ -32,10 +32,10 @@ namespace FusionCharts.Charts
             bgOpacity
         }
 
-        #region constractor methods
+        #region constructor methods
         /// <summary>
-        /// Chart constractor
-        /// Chart configuration parameters can be supplyed to the constractor also.
+        /// Chart constructor
+        /// Chart configuration parameters can be supplyed to the constructor also.
         /// </summary>
         public Chart()
         {
@@ -43,6 +43,9 @@ namespace FusionCharts.Charts
         }
 
 
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         public Chart(string chartType)
         {
@@ -51,6 +54,9 @@ namespace FusionCharts.Charts
             SetChartParameter("type", chartType);
         }
 
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
         public Chart(string chartType, string chartId)
@@ -61,6 +67,9 @@ namespace FusionCharts.Charts
             SetChartParameter("id", chartId);
         }
 
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
         /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
@@ -73,6 +82,9 @@ namespace FusionCharts.Charts
             SetChartParameter("width", chartWidth);
         }
 
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
         /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
@@ -87,6 +99,9 @@ namespace FusionCharts.Charts
             SetChartParameter("height", chartHeight);
         }
 
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
         /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
@@ -102,7 +117,10 @@ namespace FusionCharts.Charts
             SetChartParameter("width", chartWidth);
             SetChartParameter("height", chartHeight);
         }
-        
+
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
         /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
@@ -121,13 +139,16 @@ namespace FusionCharts.Charts
             SetChartParameter("height", chartHeight);
         }
 
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
         /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
         /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
         /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
         /// <param name="dataSource">Data for the chart</param>
-        /// <param name="bgColor">Back-ground-color of the chart container</param>
+        /// <param name="bgColor">Background color of the chart container</param>
         public Chart(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, string dataSource,
             string bgColor)
         {
@@ -142,6 +163,9 @@ namespace FusionCharts.Charts
             SetChartParameter("containerBackgroundColor", bgColor);
         }
 
+        /// <summary>
+        /// Chart constructor
+        /// </summary>
         /// <param name="chartType">The type of chart that you intend to plot</param>
         /// <param name="chartId">Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.</param>
         /// <param name="chartWidth">Intended width for the chart (in pixels)</param>
@@ -149,7 +173,7 @@ namespace FusionCharts.Charts
         /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
         /// <param name="dataSource">Data for the chart</param>
         /// <param name="bgColor">Back-ground-color of the chart container</param>
-        /// <param name="bgOpacity">Back-ground-opacity of the chart container</param>
+        /// <param name="bgOpacity">Background opacity of the chart container</param>
         public Chart(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, string dataSource,
             string bgColor, string bgOpacity)
         {
@@ -214,7 +238,7 @@ namespace FusionCharts.Charts
         #region Public Methods
         /// <summary>
         /// Public method to clone an exiting FusionCharts instance
-        /// To make the chartId unic, this function will add "_clone" as suffix in the clone chart's chartID.
+        /// To make the chartId unique, this function will add "_clone" as suffix in the clone chart's Id.
         /// </summary>
         public object Clone()
         {
@@ -360,7 +384,7 @@ namespace FusionCharts.Charts
         /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
         /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
         /// <param name="dataSource">Data for the chart</param>
-        /// <param name="bgColor">Back-ground-color of the chart container</param>
+        /// <param name="bgColor">Background color of the chart container</param>
         /// <returns>JavaScript + HTML code required to embed a chart</returns>
 
         public string Render(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, string dataSource,
@@ -388,8 +412,8 @@ namespace FusionCharts.Charts
         /// <param name="chartHeight">Intended height for the chart (in pixels)</param>
         /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
         /// <param name="dataSource">Data for the chart</param>
-        /// <param name="bgColor">Back-ground-color of the chart container</param>
-        /// <param name="bgOpacity">Back-ground-opacity of the chart container</param>
+        /// <param name="bgColor">Background color of the chart container</param>
+        /// <param name="bgOpacity">Background opacity of the chart container</param>
         /// <returns>JavaScript + HTML code required to embed a chart</returns>
 
         public string Render(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, string dataSource,
@@ -415,7 +439,7 @@ namespace FusionCharts.Charts
         /// SetChartParameter sets various configurations of a FusionCharts instance
         /// </summary>
         /// <param name="param">Name of chart parameter</param>
-        /// <param name="value">Value of configuration</param>
+        /// <param name="value">Value of chart parameter</param>
         public void SetChartParameter(ChartParameter param, object value)
         {
 
