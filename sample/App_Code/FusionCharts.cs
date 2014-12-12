@@ -32,6 +32,18 @@ namespace FusionCharts.Charts
             bgOpacity
         }
 
+        /// <summary>
+        /// List of supported data formats
+        /// </summary>
+        public enum DataFormat
+        {
+            json,
+            jsonurl,
+            xml,
+            xmlurl,
+            csv
+        }
+
         #region constructor methods
         /// <summary>
         /// Chart constructor
@@ -471,11 +483,10 @@ namespace FusionCharts.Charts
         /// </summary>
         /// <param name="dataSource">Data for the chart</param>
         /// <param name="dataFormat">Data format. e.g. json, jsonurl, csv, xml, xmlurl</param>
-
-        public void SetData(string dataSource, string dataFormat)
+        public void SetData(string dataSource, DataFormat format)
         {
             SetChartParameter("dataSource", dataSource);
-            SetChartParameter("dataFormat", dataSource);
+            SetChartParameter("dataFormat", format.ToString());
         }
 
         #endregion
