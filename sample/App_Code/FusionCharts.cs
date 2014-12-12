@@ -462,8 +462,9 @@ namespace FusionCharts.Charts
         /// GetChartParameter returns the value of a parameter of a FusionCharts instance
         /// </summary>
         /// <param name="param">Name of chart parameter</param>
-
-        private string GetChartParameter(ChartParameter param)
+        /// <returns>String</returns>
+       
+        public string GetChartParameter(ChartParameter param)
         {
             return GetChartParameter(__PARAMMAP__[param.ToString()].ToString());
         }
