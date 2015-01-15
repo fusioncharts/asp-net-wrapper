@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>FusionCharts - Simple Column 3D Chart</title>
+    <title>FusionCharts - Simple</title>
     <!-- FusionCharts script tag -->
     <script type="text/javascript" src="fusioncharts/fusioncharts.js"></script>
     <!-- End -->
