@@ -64,7 +64,7 @@
                     "startvalue": "700000",
                     "istrendzone": "1",
                     "valueonright": "1",
-                    "tooltext": "AYAN",
+                    "tooltext": "FusionCharts",
                     "endvalue": "900000",
                     "color": "009933",
                     "displayvalue": "Target",
@@ -73,23 +73,6 @@
                 }
             ]
         }
-    ],
-    "styles": {
-        "definition": [
-            {
-                "name": "CanvasAnim",
-                "type": "animation",
-                "param": "_xScale",
-                "start": "0",
-                "duration": "1"
-            }
-        ],
-        "application": [
-            {
-                "toobject": "Canvas",
-                "styles": "CanvasAnim"
-            }
-        ]
-    }
+    ]
 }
 

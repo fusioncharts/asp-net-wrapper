@@ -1,0 +1,46 @@
+﻿<%@ Master Language="C#" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>FusionCharts - using Master Pages</title>
+
+    <script type="text/javascript"  src="../fusioncharts/fusioncharts.js"></script>
+
+    <style type="text/css">
+        h2.headline
+        {
+            font: normal 110%/137.5% "Trebuchet MS" , Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 25px 0 25px 0;
+            color: #7d7c8b;
+            text-align: center;
+        }
+        p.small
+        {
+            font: normal 68.75%/150% Verdana, Geneva, sans-serif;
+            color: #919191;
+            padding: 0;
+            margin: 0 auto;
+            width: 664px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <form id='form1' method='post' runat="server">
+            <div id="header">
+                &lt;&lt;Placeholder in the master page template for adding header information.&gt;&gt;<br /><br />
+            </div>
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+                    
+            <div id="footer"><br />
+                &lt;&lt;Placeholder in the master page template for adding footer information.&gt;&gt;
+            </div>
+        </form>
+    </center>
+</body>
+</html>

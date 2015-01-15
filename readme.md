@@ -9,7 +9,7 @@ Charts are generated in the browsers with the help of JavaScript and the HTML co
 Using this ASP.NET wrapper we can generate the required JavaScript and HTML code as a string in the server. We can put this strings in the page to generate charts.
 
 ### Version
-1.0
+1.1
 
 ### Requirements
 .NET Framework 3.5 or higher
