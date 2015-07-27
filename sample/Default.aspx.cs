@@ -18,6 +18,6 @@ public partial class BasicExample_BasicChart : System.Web.UI.Page
     {
         
         // Render the chart
-        Literal1.Text = "";
+        Literal1.Text = "Please browse to individual folders to view different samples";
     }
 }

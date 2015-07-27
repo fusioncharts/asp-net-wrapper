@@ -81,7 +81,7 @@ Clone method can be used to clone an existing chart instance. All properties exc
 Chart sales = new Chart("column3d", "myChart", "400", "300", "xmlurl", "data/data.xml");
 //Render the column3D chart
 Literal1.Text = sales.Render();
-Chart salesClone = sales.clone();
+Chart salesClone = (Chart)sales.clone();
 salesClone.SetChartParameter(Chart.ChartParameter.chartType, "column2d");
 //Render the column2D chart
 Literal2.Text = salesClone.Render();
