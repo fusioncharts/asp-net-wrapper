@@ -70,7 +70,7 @@ Public method to generate html code for rendering chart. This function assumes t
 |chartId | `String` | Id for the chart, using which it will be recognized in the HTML page. Each chart on the page needs to have a unique Id.|
 |chartWidth | `String` | Intended width for the chart (in pixels). e.g. `400`|
 |chartHeight | `String` | Intended height for the chart (in pixels). e.g. `300`|
-|dataFormat | `String` | Type of the data that is given to the chart. e.g. `json`, `jsonurl`, `csv`, `xml`, `xmlurl`|
+|dataFormat | `String` | Type of the data that is given to the chart. e.g. `json`, `jsonurl`, `xml`, `xmlurl`|
 |dataSource | `String` | Data for the chart. e.g. `{"chart":{},"data":[{"label":"Jan","value":"420000"}]}`|
 |bgColor | `String` | Background color of the chart container. e.g. `cccccc`|
 |bgOpacity | `String` | Background opacity of the chart container. e.g. `1`|
