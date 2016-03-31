@@ -33,7 +33,7 @@ Write a script tag in the <head> section of the page where you want to add the s
 ```
 **Using library files placed in a folder of your project**
 
-You can download the **<a target="_blank" href="http://www.fusioncharts.com/download/">trial version</a>[`trial version`](http://www.fusioncharts.com/download/)** of FusionCharts.
+You can download the <b><a target="_blank" href="http://www.fusioncharts.com/download/">trial version</a></b> of FusionCharts.
 
 Next assuming you have the FusionCharts library placed inside the "fusioncharts" folder  in your project, write a script tag in the <head> section of the page where you add the src of FusionCharts libary link from local folder
 ```html
