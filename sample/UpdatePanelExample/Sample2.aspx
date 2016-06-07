@@ -1,4 +1,4 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Sample2.aspx.cs" Inherits="nextSample" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Sample2.aspx.cs" Inherits="nextSample" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -34,7 +34,7 @@
     <div id="wrapper">
         <asp:ScriptManager ID="ScriptManager1" runat="server">
             <Scripts>
-                <asp:ScriptReference Path="~/UpdatePanel/JS/updatepanelhook.fusioncharts.js" />
+                <asp:ScriptReference Path="~/UpdatePanelExample/JS/updatepanelhook.fusioncharts.js" />
             </Scripts>
         </asp:ScriptManager>
         <div id="header">

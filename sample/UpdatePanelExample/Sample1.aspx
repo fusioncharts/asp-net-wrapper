@@ -34,7 +34,7 @@
     <div id="wrapper">
         <asp:ScriptManager ID="ScriptManager1" runat="server">
             <Scripts>
-                <asp:ScriptReference Path="~/UpdatePanel/JS/updatepanelhook.fusioncharts.js" />
+                <asp:ScriptReference Path="~/UpdatePanelExample/JS/updatepanelhook.fusioncharts.js" />
             </Scripts>
         </asp:ScriptManager>
         <div id="header">
