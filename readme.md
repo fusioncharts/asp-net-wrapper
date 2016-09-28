@@ -9,7 +9,7 @@ Conventionally, FusionCharts Suite XT uses JavaScript and HTML to generate chart
 
 
 ### Version
-1.2
+1.3
 
 ### Requirements
 .NET Framework 3.5 or higher
