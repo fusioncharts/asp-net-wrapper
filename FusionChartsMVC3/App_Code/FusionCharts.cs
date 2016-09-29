@@ -233,6 +233,10 @@ namespace FusionCharts.Charts
 
             string chartConfigJSON = fc_encodeJSON(GetConfigurationGroup("params"), true);
 
+            // Removes the extra trailing commas in generated JavaScript Object
+            int Place = chartConfigJSON.LastIndexOf(',');
+            chartConfigJSON = (Place >= 0) ? chartConfigJSON.Remove(Place, 1).Insert(Place, "") : chartConfigJSON;
+
             builder.Append("<script type=\"text/javascript\">" + Environment.NewLine);
             builder.Append("FusionCharts && FusionCharts.ready(function () {" + Environment.NewLine);
             builder.AppendFormat("if (FusionCharts(\"{0}\") ) FusionCharts(\"{0}\").dispose();\n", chartId);
@@ -709,6 +713,10 @@ namespace InfoSoftGlobal
             string dataSource = (dataStr == "" ? dataUrl : dataStr.Replace("\n\r", ""));
             string dataSourceJSON = "\"dataSource\" : " + (dataFormat == "json" ? dataSource : "\"" + dataSource + "\"");
             string chartConfigJSON = "{" + fc_encodeJSON(GetConfigurationGroup(ref __CONFIGCLONE__, "params"), false) + "," + dataSourceJSON + "}";
+
+            // Removes the extra trailing commas in generated JavaScript Object
+            int Place = chartConfigJSON.LastIndexOf(',');
+            chartConfigJSON = (Place >= 0) ? chartConfigJSON.Remove(Place, 1).Insert(Place, "") : chartConfigJSON;
 
             StringBuilder builder = new StringBuilder();
             builder.AppendFormat("<!-- Using ASP.NET FusionCharts v3.2.2.1 Wrapper and JavaScript rendering --><!-- START Script Block for Chart {0} -->" + Environment.NewLine, chartId);
