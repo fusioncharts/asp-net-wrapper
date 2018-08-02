@@ -15,9 +15,15 @@ Conventionally, FusionCharts Suite XT uses JavaScript and HTML to generate chart
 .NET Framework 3.5 or higher
 
 ### Installation
- * Download the **[`ASP C# wrapper package`](http://www.fusioncharts.com/downloads/wrappers/asp-net-wrapper.zip)**
- * Unzip the archive and move to "asp-net-wrapper/Src/" folder to get the "FusionCharts.cs" file.
- * To add the file inside your project right click the project name from "Solution Explorer" and select "Add->Existing item". Don't forget to select the file type as "Code Files" from the file explorer window that appears. Select the "FusionCharts.cs" file from the explorer and click "Add".
+ * Download the **[fusioncharts-suite-xt](http://www.fusioncharts.com/)**
+ * Unzip the archive and move to "integrations > asp.net-cs > fusioncharts-wrapper-source" to get the "FusionCharts.cs" file.
+ * Copy "FusionCharts.cs" to App_code folder inside your project.
+ 
+ or you can add dll file reference in your project
+ 
+ * Download the **[fusioncharts-suite-xt](http://www.fusioncharts.com/)**
+ * Unzip the archive and move to "integrations > asp.net-cs > fusioncharts-wrapper-assembly" to get the "FusionCharts.dll" file.
+ * Add reference to your project.
  
 ### Usage
 #### Installing FusionCharts JS libraries in your page where you want to display FusionCharts
@@ -43,7 +49,7 @@ Now, you are ready to prepare the chart using our ASP-C#-wrapper.
 
 #### Using the wrapper
 #### Step 1:
-**Include the wrapper file (`FusionCharts.cs`) to your CS page:**
+**Include the wrapper source file (`FusionCharts.cs`) or wrapper dll (`FusionCharts.dll`) to your CS page:**
 
 * Include the package inside your project (See [Installation Guide](#Installation))
 * Add the reference of the file to the page where you want to display FusionCharts. To do so write the following code befor the class description begins of your page.
