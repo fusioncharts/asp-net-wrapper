@@ -17,9 +17,11 @@ Conventionally, FusionCharts Suite XT uses JavaScript and HTML to generate chart
 ### Installation
  * Download the **[fusioncharts-suite-xt](http://www.fusioncharts.com/)**
  * Unzip the archive and move to "integrations > asp.net-cs > fusioncharts-wrapper-source" to get the "FusionCharts.cs" file.
- * Copy "FusionCharts.cs" to App_code folder inside your project.
+ * Copy "FusionCharts.cs" to App_Code folder inside your project.
  
- or you can add dll file reference in your project
+ Or 
+ 
+ You can add dll file reference in your project
  
  * Download the **[fusioncharts-suite-xt](http://www.fusioncharts.com/)**
  * Unzip the archive and move to "integrations > asp.net-cs > fusioncharts-wrapper-assembly" to get the "FusionCharts.dll" file.
