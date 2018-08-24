@@ -146,7 +146,7 @@ This is a public method used to generate the html code for rendering a chart. Th
 |bgOpacity | `String` | Background opacity of the chart container. e.g. `1`|
 
 ###### **AddEvent**
-This is a public method used to generate the html code to attachevent to a chart. This function assumes that you've already included the FusionCharts JavaScript class in your page. The following parameters have to be passed in order to attach event function.
+This is a public method used to generate the html code to add an event to a chart. This function assumes that you've already included the FusionCharts JavaScript class in your page. The following parameters have to be passed in order to attach event function.
 
 | Parameter | Type | Description |
 |:-------|:----------:| :------|
