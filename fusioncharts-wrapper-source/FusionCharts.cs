@@ -15,6 +15,8 @@ namespace FusionCharts.Charts
     {
         private Hashtable __CONFIG__ = null;
         private static Hashtable __PARAMMAP__ = null;
+        private  string events = "";
+        //private string message = "";
 
         /// <summary>
         /// User configurable chart parameter list 
@@ -237,6 +239,7 @@ namespace FusionCharts.Charts
             builder.Append("FusionCharts && FusionCharts.ready(function () {" + Environment.NewLine);
             builder.AppendFormat("if (FusionCharts(\"{0}\") ) FusionCharts(\"{0}\").dispose();\n", chartId);
             builder.AppendFormat("var chart_{0} = new FusionCharts({1}).render();" + Environment.NewLine, chartId, chartConfigJSON);
+            builder.Append(events);
             builder.Append("});" + Environment.NewLine);
             builder.Append("</script>" + Environment.NewLine);
             builder.AppendFormat("<!-- END Script Block for Chart {0} -->" + Environment.NewLine, chartId);
@@ -248,6 +251,30 @@ namespace FusionCharts.Charts
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// public method to attach event from client side
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="funcName"></param>
+        public void AddEvent(string eventName, string funcName)
+        {
+            string eventHTML;
+            string chartId = GetChartParameter("id");
+            eventHTML = string.Format("FusionCharts(\"{0}\").addEventListener(\"{1}\",{2});" + Environment.NewLine, chartId,eventName,funcName);
+            events += eventHTML;
+        }
+        /// <summary>
+        /// public method to add attributes for message customization
+        /// </summary>
+        /// <param name="messageAttribute"></param>
+        /// <param name="messageAttributeValue"></param>
+        public void AddMessage(string messageAttribute, string messageAttributeValue)
+        {
+            string messageHTML;
+            messageHTML = string.Format("{0}:\"{1}\",", messageAttribute, messageAttributeValue);
+            SetChartParameter("message", messageHTML);
+
+        }
         /// <summary>
         /// Public method to clone an exiting FusionCharts instance
         /// To make the chartId unique, this function will add "_clone" as suffix in the clone chart's Id.
@@ -508,7 +535,15 @@ namespace FusionCharts.Charts
         {
             if (((Hashtable)__CONFIG__["params"]).ContainsKey(setting))
             {
-                ((Hashtable)__CONFIG__["params"])[setting] = value;
+                if (setting.Equals("message", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ((Hashtable)__CONFIG__["params"])[setting] += value.ToString();
+                }
+                else
+                {
+                    ((Hashtable)__CONFIG__["params"])[setting] = value;
+                }
+                
             }
         }
 
@@ -522,6 +557,7 @@ namespace FusionCharts.Charts
                 __PARAMMAP__["chartId"] = "id";
                 __PARAMMAP__["chartWidth"] = "width";
                 __PARAMMAP__["chartHeight"] = "height";
+                __PARAMMAP__["message"] = "message";
                 __PARAMMAP__["dataFormat"] = "dataFormat";
                 __PARAMMAP__["dataSource"] = "dataSource";
                 __PARAMMAP__["renderAt"] = "renderAt";
@@ -538,6 +574,7 @@ namespace FusionCharts.Charts
             param["type"] = "";
             param["width"] = "";
             param["height"] = "";
+            param["message"] = "";
             param["renderAt"] = "";
             param["dataSource"] = "";
             param["dataFormat"] = "";
@@ -594,11 +631,18 @@ namespace FusionCharts.Charts
                         {
                             Value = "\"" + Value + "\"";
                         }
+                        strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
                     }
-                    else {
+                    else if (Key.ToLower().Equals("message"))
+                    {
+                        strjson = strjson + Environment.NewLine + Value;
+                    }
+                    else
+                    {
                         Value = "\"" + Value + "\"";
+                        strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
                     }
-                    strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
+                     
                 }
                 else if (ds.Key.ToString().Equals("renderAt"))
                 {
