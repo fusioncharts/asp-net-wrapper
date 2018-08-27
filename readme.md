@@ -177,7 +177,7 @@ salesClone.SetChartParameter(Chart.ChartParameter.chartType, "column2d");
 Literal2.Text = salesClone.Render();
 ```
 
-###License
+### License
 
 **FUSIONCHARTS:**
 
