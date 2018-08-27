@@ -34,6 +34,7 @@
             <div><span><asp:HyperLink id="hyperlink21" NavigateUrl="Pages/ChartTooltipCustomization.aspx" Text="Customizing tooltip" runat="server"/></span></div>
             <div><span><asp:HyperLink id="hyperlink22" NavigateUrl="Pages/ChartLanguage.aspx" Text="Different language example" runat="server"/></span></div>
             <div><span><asp:HyperLink id="hyperlink23" NavigateUrl="Pages/ChartSpclChar.aspx" Text="Chart using special character in XML data format" runat="server"/></span></div>
+			<div><span><asp:HyperLink id="hyperlink24" NavigateUrl="Pages/HighlightDataPoint.aspx" Text="HighLight one Data Point" runat="server"/></span></div>
             <div><span><asp:HyperLink id="hyperlink24" NavigateUrl="Pages/ChartInstanceLevelAPI.aspx" Text="Add event to a chart dyamically" runat="server"/></span></div>
             <div><span><asp:HyperLink id="hyperlink25" NavigateUrl="Pages/ChartMessageExample.aspx" Text="Configure chart message" runat="server"/></span></div>
             <div><span><asp:HyperLink id="hyperlink26" NavigateUrl="Pages/GetDataSelectScatterChart.aspx" Text="Get data from select scatter chart and show them in tabular format" runat="server"/></span></div>
