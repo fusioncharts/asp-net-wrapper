@@ -150,18 +150,18 @@ This is a public method used to generate the html code to add an event to a char
 
 | Parameter | Type | Description |
 |:-------|:----------:| :------|
-| eventName | `String` | which event you ean to bind. e.g. `dataLoaded`.|
+| eventName | `String` | which event you want to bind. e.g. `dataLoaded`.|
 |funcName | `String` | javascript function, which is written in your client side code|
 
 chartObj.AddEvent("dataLoaded", "onDataLoaded");
 
 ###### **AddMessage**
-This is a public method used to generate the html code to  customize chart messages. This function assumes that you've already included the FusionCharts JavaScript class in your page. The following parameters have to be passed in this method.
+This is a public method used to generate the html code to attach an event to a chart. This function assumes that you’ve already included the FusionCharts JavaScript class in your page. The following parameters have to be passed in order to attach event through addEvent function.
 
 | Parameter | Type | Description |
 |:-------|:----------:| :------|
-| messageAttribute | `String` | which parameter want to customize. e.g. `loadMessage`.|
-|messageAttributeValue | `String` | customized value|
+| messageAttribute | `String` |  parameter want to customize. e.g. `loadMessage`.|
+|messageAttributeValue | `String` | Your custom message|
 
 chartObj.AddMessage("loadMessage", "please wait data is being loaded");
 
