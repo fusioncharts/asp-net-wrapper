@@ -177,6 +177,215 @@ salesClone.SetChartParameter(Chart.ChartParameter.chartType, "column2d");
 Literal2.Text = salesClone.Render();
 ```
 
+### **FusionTime:**
+
+**Create the chart object with TimeSeries chart with the required parameters as shown below.**
+
+```c#
+FusionTable fusionTable = new FusionTable(schema, data);
+TimeSeries timeSeries = new TimeSeries(fusionTable);
+
+// Wrapper constructor parameters
+// charttype, chartID, width, height, data format, TimeSeries object
+
+Chart fcChart = new Chart("timeseries", "MyFirstChart" , "700", "450", "json", timeSeries);
+
+// Render the chart
+Literal1.Text = fcChart.Render();
+```
+There are two classes that you need to use in order to create a TimeSeries chart, `FusionTable` and `TimeSeries`.
+
+### **Constructor parameters of FusionTable :**
+This class creates `timeseries` compatible `FusionTable` object which later passed to the TimeSeries class constructor.
+
+```c#
+// Creating FusionTable
+FusionTable fusionTable = new FusionTable(schema, data);
+```
+
+Let you set the following parameters in FusionTable constructor.
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|schema | `String` | The schema which defines the properties of the columns|
+|data | `String` | The actual values for each row and column of the DataTable|
+
+### **Data operation:**
+
+FusionTable also supports following DataTable operations:
+
+* Select
+* Sort
+* Filter
+* Pipe
+
+**`Select`** operation should be used only when you want to see few specific columns of the DataTable.
+
+```c#
+FusionTable fusionTable = new FusionTable(schema, data);
+
+// Column names as parameter
+fusionTable.Select("Country", "Sales");
+```
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|columnName | `String` | Define multiple columns name.|
+
+**`Sort`** one of the major requirements while working with large sets of data is to sort the data in a specific order - most commonly, ascending or descending.
+
+```c#
+FusionTable fusionTable = new FusionTable(schema, data);
+
+//column name and orderby
+fusionTable.Sort("Sales", FusionTable.OrderBy.ASC);
+```
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|columnName | `String` | Define column name on which sorting will be applied.|
+|columnOrderBy | `Enum` | To sort the column in descending or ascending order. e.g. `FusionTable.OrderBy.ASC, FusionTable.OrderBy.DESC`|
+
+**`Filter`** comes with a set of operations that you can use to filter data values from a large dataset, based on one or more conditions. Supported filter operations are:
+
+* Equals
+* Greater
+* GreaterEquals
+* Less
+* LessEquals
+* Between
+
+```c#
+// Filter - Equal
+// Creating filter statement by passing the filter type, column name and filter value
+String filter1 = fusionTable.CreateFilter(FusionTable.FilterType.Equals, "Country", "United States");
+
+//Applying the filter on fusion table
+fusionTable.ApplyFilter(filter1);
+```
+
+```c#
+// Filter - Greater
+// Creating filter statement by passing the filter type, column name and filter value
+String filter1 = fusionTable.CreateFilter(FusionTable.FilterType.Greater, "Quantity", 100);
+
+//Applying the filter on fusion table
+fusionTable.ApplyFilter(filter1);
+```
+
+```c#
+// Filter - GreaterEquals
+// Creating filter statement by passing the filter type, column name and filter value
+String filter1 = fusionTable.CreateFilter(FusionTable.FilterType.GreaterEquals, "Quantity", 100);
+
+//Applying the filter on fusion table
+fusionTable.ApplyFilter(filter1);
+```
+
+```c#
+// Filter - Less
+// Creating filter statement by passing the filter type, column name and filter value
+String filter1 = fusionTable.CreateFilter(FusionTable.FilterType.Less, "Quantity", 100);
+
+//Applying the filter on fusion table
+fusionTable.ApplyFilter(filter1);
+```
+
+```c#
+// Filter - LessEquals
+// Creating filter statement by passing the filter type, column name and filter value
+String filter1 = fusionTable.CreateFilter(FusionTable.FilterType.LessEquals, "Quantity", 100);
+
+//Applying the filter on fusion table
+fusionTable.ApplyFilter(filter1);
+```
+
+```c#
+// Filter - Between
+// Creating filter statement by passing the filter type, column name and filter value
+String filter1 = fusionTable.CreateFilter(FusionTable.FilterType.Between, "Quantity", 100, 1000);
+
+//Applying the filter on fusion table
+fusionTable.ApplyFilter(filter1);
+```
+
+let you set the following parameter of `CreateFilter` method for creating filter statement.
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|filterType | `Enum` | Define the filter type. e.g. `FusionTable.FilterType.Equals`, `FusionTable.FilterType.Greater` etc.|
+|columnName | `String` | Define column name on which the filter will be applied.|
+|values | `Object` | Define filter value(s). e.g. `String`, `Integer` values.|
+
+let you set the following parameter of `ApplyFilter` method for applying the filter on fusion table.
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|filter | `String` | Define the `Filter statement`|
+
+```c#
+// Filter - Apply conditional filter
+// Define anonymous function to filter
+fusionTable.ApplyFilterByCondition(@"(row, columns) => {
+                   	return row[columns.Country] === 'USA' ||
+                   	(row[columns.Sales] > 100 && row[columns.Shipping_Cost] < 10);
+                    }");
+```
+
+**`Pipe`**  is an operation which lets you run two or more data operations in a sequence. Instead of applying multiple filters one by one to a DataTable which creates multiple DataTable(s), you can combine them in one single step using pipe and apply to the DataTable. This creates only one DataTable.
+
+```c#
+FusionTable fusionTable = new FusionTable(schema, data);
+
+// Creating first filter statement by passing the filter type, column name and filter value
+String filter1 = fusionTable.CreateFilter(FusionTable.FilterType.Equals, "Country", "India");
+
+// Creating second filter statement by passing the filter type, column name and filter value
+String filter2 = fusionTable.CreateFilter(FusionTable.FilterType.Greater, "Quantity", 100);
+
+//Applying multiple filters one by one to a DataTable
+fusionTable.Pipe(filter1, filter2);  
+```
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|filters | `String` | Define multiple filters.|
+
+### **Constructor parameter of TimeSeries :**
+This class creates `timeseries` compatible `TimeSeries` object which later passed to the chart object.
+
+```c#
+// Creating TimeSeries object
+TimeSeries timeSeries = new TimeSeries(fusionTable);
+```
+
+let you set the following parameter in TimeSeries constructor.
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|fusionTable | `FusionTable` | The Datatable which defines the schema and actual data (FusionTable).|
+
+#### Methods ####
+
+**`AddAttribute`** is a public method to accept data as a form of JSON string to configure the chart attributes. e.g. `caption`, `subCaption`, `xAxis` etc.
+
+```c#
+
+FusionTable fusionTable = new FusionTable(schema, data);
+TimeSeries timeSeries = new TimeSeries(fusionTable);
+ 
+timeSeries.AddAttribute("caption", @"{
+                                    	text: ' Online Sales'
+                                  	}");
+```
+
+let you set the following parameter in `AddAttribute` method.
+
+| Parameter | Type | Description |
+|:-------|:----------:| :------|
+|key | `String` | The attribute name.|
+|value | `String` | Define json formatted value.|
+
 ### License
 
 **FUSIONCHARTS:**
