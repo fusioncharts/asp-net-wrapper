@@ -67,7 +67,7 @@
            <input type="radio" name="theme-options" value="ocean"/> Ocean
        </label>
         </div>
-    <div><span><a href ="../Default.aspx">GO BACK</a></span></div>
+    <div><span><a href ="../Default.aspx">Go Back</a></span></div>
     
 </body>
 </html>

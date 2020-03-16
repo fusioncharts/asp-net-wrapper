@@ -15,6 +15,8 @@ namespace FusionCharts.Charts
     {
         private Hashtable __CONFIG__ = null;
         private static Hashtable __PARAMMAP__ = null;
+        private  string events = "";
+        //private string message = "";
 
         /// <summary>
         /// User configurable chart parameter list 
@@ -200,7 +202,20 @@ namespace FusionCharts.Charts
             SetChartParameter("containerBackgroundColor", bgColor);
             SetChartParameter("containerBackgroundOpacity", bgOpacity);
         }
-         #endregion
+
+        public Chart(string chartType, string chartId, string chartWidth, string chartHeight, string dataFormat, TimeSeries timeSeries)
+        {
+            __INIT();
+
+            SetChartParameter("type", chartType);
+            SetChartParameter("dataFormat", dataFormat);
+            SetChartParameter("dataSource", timeSeries);
+            SetChartParameter("id", chartId);
+            SetChartParameter("width", chartWidth);
+            SetChartParameter("height", chartHeight);
+        }
+
+        #endregion
 
         #region RenderALL methods
 
@@ -211,8 +226,12 @@ namespace FusionCharts.Charts
         /// <returns>JavaScript + HTML code required to embed a chart</returns>
         private string RenderChartALL()
         {
-
+            TimeSeries timeSeries = null;
             string dataSource = GetChartParameter("dataSource");
+            if (dataSource.Equals("FusionCharts.Charts.TimeSeries", StringComparison.OrdinalIgnoreCase))
+            {
+                timeSeries = GetChartParameter<TimeSeries>("dataSource");
+            }
             string dataFormat = GetChartParameter("dataFormat");
             string chartId = GetChartParameter("id");
             string renderAt = GetChartParameter("renderAt");
@@ -231,16 +250,21 @@ namespace FusionCharts.Charts
                 builder.Append("</div>" + Environment.NewLine);
             }
 
-            string chartConfigJSON = fc_encodeJSON(GetConfigurationGroup("params"), true);
+            string chartConfigJSON = fc_encodeJSON(GetConfigurationGroup("params"), true, timeSeries);
 
             builder.Append("<script type=\"text/javascript\">" + Environment.NewLine);
             builder.Append("FusionCharts && FusionCharts.ready(function () {" + Environment.NewLine);
+
+            if (timeSeries != null)
+            {
+                builder.AppendLine(timeSeries.GetDataStore());
+            }
             builder.AppendFormat("if (FusionCharts(\"{0}\") ) FusionCharts(\"{0}\").dispose();\n", chartId);
             builder.AppendFormat("var chart_{0} = new FusionCharts({1}).render();" + Environment.NewLine, chartId, chartConfigJSON);
+            builder.Append(events);
             builder.Append("});" + Environment.NewLine);
             builder.Append("</script>" + Environment.NewLine);
             builder.AppendFormat("<!-- END Script Block for Chart {0} -->" + Environment.NewLine, chartId);
-
             return builder.ToString();
 
         }
@@ -248,6 +272,30 @@ namespace FusionCharts.Charts
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// public method to attach event from client side
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="funcName"></param>
+        public void AddEvent(string eventName, string funcName)
+        {
+            string eventHTML;
+            string chartId = GetChartParameter("id");
+            eventHTML = string.Format("FusionCharts(\"{0}\").addEventListener(\"{1}\",{2});" + Environment.NewLine, chartId,eventName,funcName);
+            events += eventHTML;
+        }
+        /// <summary>
+        /// public method to add attributes for message customization
+        /// </summary>
+        /// <param name="messageAttribute"></param>
+        /// <param name="messageAttributeValue"></param>
+        public void AddMessage(string messageAttribute, string messageAttributeValue)
+        {
+            string messageHTML;
+            messageHTML = string.Format("{0}:\"{1}\",", messageAttribute, messageAttributeValue);
+            SetChartParameter("message", messageHTML);
+
+        }
         /// <summary>
         /// Public method to clone an exiting FusionCharts instance
         /// To make the chartId unique, this function will add "_clone" as suffix in the clone chart's Id.
@@ -508,7 +556,15 @@ namespace FusionCharts.Charts
         {
             if (((Hashtable)__CONFIG__["params"]).ContainsKey(setting))
             {
-                ((Hashtable)__CONFIG__["params"])[setting] = value;
+                if (setting.Equals("message", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ((Hashtable)__CONFIG__["params"])[setting] += value.ToString();
+                }
+                else
+                {
+                    ((Hashtable)__CONFIG__["params"])[setting] = value;
+                }
+                
             }
         }
 
@@ -522,8 +578,9 @@ namespace FusionCharts.Charts
                 __PARAMMAP__["chartId"] = "id";
                 __PARAMMAP__["chartWidth"] = "width";
                 __PARAMMAP__["chartHeight"] = "height";
+                __PARAMMAP__["message"] = "message";
                 __PARAMMAP__["dataFormat"] = "dataFormat";
-                __PARAMMAP__["dataSource"] = "dataSource";
+                __PARAMMAP__["dataSource"] = "dataSource";               
                 __PARAMMAP__["renderAt"] = "renderAt";
                 __PARAMMAP__["bgColor"] = "containerBackgroundColor";
                 __PARAMMAP__["bgOpacity"] = "containerBackgroundOpacity";
@@ -538,6 +595,7 @@ namespace FusionCharts.Charts
             param["type"] = "";
             param["width"] = "";
             param["height"] = "";
+            param["message"] = "";
             param["renderAt"] = "";
             param["dataSource"] = "";
             param["dataFormat"] = "";
@@ -564,6 +622,16 @@ namespace FusionCharts.Charts
         }
 
 
+        private T GetChartParameter<T>(string setting)
+        {
+            if (((Hashtable)__CONFIG__["params"]).ContainsKey(setting))
+            {
+                object result = ((Hashtable)__CONFIG__["params"])[setting];
+                return (T)Convert.ChangeType(result, typeof(T));
+            }
+            return (T)Convert.ChangeType(null, typeof(T)); ;
+        }
+
         private string GetChartParameter(string setting)
         {
             if (((Hashtable)__CONFIG__["params"]).ContainsKey(setting))
@@ -572,9 +640,8 @@ namespace FusionCharts.Charts
             }
             return null;
         }
-
-
-        private string fc_encodeJSON(Hashtable json, bool enclosed)
+        
+        private string fc_encodeJSON(Hashtable json, bool enclosed, TimeSeries timeSeries)
         {
             string strjson = "", Key = "", Value = "";
             
@@ -587,18 +654,31 @@ namespace FusionCharts.Charts
                     // If this is not the dataSource then convert the value as JavaScript string
                     if (Key.ToLower().Equals("datasource"))
                     {
-                        // Remove new line char from the dataSource
-                        Value.Replace("\n\r", "");
-                        // detect if non-JSON format then wrap with quot '"'
-                        if (!(Value.StartsWith("{") && Value.EndsWith("}")))
+                        if (timeSeries == null)
+                        {// Remove new line char from the dataSource
+                            Value.Replace("\n\r", "");
+                            // detect if non-JSON format then wrap with quot '"'
+                            if (!(Value.StartsWith("{") && Value.EndsWith("}")))
+                            {
+                                Value = "\"" + Value + "\"";
+                            }
+                            strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
+                        }
+                        else
                         {
-                            Value = "\"" + Value + "\"";
+                            strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + timeSeries.GetDataSource() + ", ";                            
                         }
                     }
-                    else {
-                        Value = "\"" + Value + "\"";
+                    else if (Key.ToLower().Equals("message"))
+                    {
+                        strjson = strjson + Environment.NewLine + Value;
                     }
-                    strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
+                    else
+                    {
+                        Value = "\"" + Value + "\"";
+                        strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
+                    }
+                     
                 }
                 else if (ds.Key.ToString().Equals("renderAt"))
                 {
@@ -628,6 +708,147 @@ namespace FusionCharts.Charts
         #endregion
 
     }
+
+    #region TimeSeries chart
+
+    public class TimeSeries
+    {
+        private List<KeyValuePair<string, string>> attributes = new List<KeyValuePair<string, string>>();
+        private FusionTable fusionTableObject = null;
+
+        public TimeSeries(FusionTable fusionTable)
+        {
+            this.fusionTableObject = fusionTable;
+        }
+
+        public void AddAttribute(string Key, string Value)
+        {
+            attributes.Add(new KeyValuePair<string, string>(Key, Value));
+        }
+
+        public string GetDataSource()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (KeyValuePair<string, string> attrib in attributes)
+            {
+                sb.Append(string.Format("{0}:{1},{2}", attrib.Key, attrib.Value, Environment.NewLine));
+            }
+
+            sb.Append(string.Format("{0}:{1}{2}", "data", "fusionTable", Environment.NewLine));
+
+            return "{" + Environment.NewLine + sb.ToString() + Environment.NewLine + "}";
+        }
+
+        public string GetDataStore()
+        {
+            return fusionTableObject.GetDataTable();
+        }
+    }
+
+    public class FusionTable
+    {
+        public enum OrderBy
+        {
+            ASC = 0,
+            DESC = 1
+        }
+
+        public enum FilterType
+        {
+            Equals = 0,
+            Greater = 1,
+            GreaterEquals = 2,
+            Less = 3,
+            LessEquals = 4,
+            Between = 5
+        }
+
+        private StringBuilder stringBuilder = null;
+
+        public FusionTable(string schema, string data)
+        {
+            this.stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("let schema = " + schema + ";");
+            stringBuilder.AppendLine("let data = " + data + ";");
+            stringBuilder.AppendLine("let fusionDataStore = new FusionCharts.DataStore();");
+            stringBuilder.AppendLine("let fusionTable = fusionDataStore.createDataTable(data, schema);");
+        }
+
+        public void Select(params string[] columnName)
+        {
+            if (columnName.Length > 0)
+            {
+                string columns = string.Format("'{0}'", string.Join("', '", columnName));
+                stringBuilder.AppendLine("fusionTable = fusionTable.query(FusionCharts.DataStore.Operators.select([" + columns + "]));");
+            }
+        }
+
+        public void Sort(String columnName, OrderBy columnOrderBy)
+        {
+            string data = string.Format("{{column: '{0}', order: '{1}'}}", columnName, columnOrderBy.Equals(OrderBy.ASC) ? "asc" : "desc");
+            string sortedData = string.Format("sort([{0}])", data);
+            stringBuilder.AppendLine("fusionTable = fusionTable.query(" + sortedData + ");");
+        }
+
+        public string CreateFilter(FilterType filterType, String columnName, params object[] values)
+        {
+            string fx = filterType.ToString();
+            fx = char.ToLower(fx[0]) + fx.Substring(1);
+            string filter = string.Empty;
+
+            switch (filterType)
+            {
+                case FilterType.Equals:
+                    filter = string.Format("FusionCharts.DataStore.Operators.{0}('{1}', '{2}')", fx, columnName, values[0].ToString());
+                    break;
+                case FilterType.Between:
+                    if (values.Length > 1)
+                    {
+                        filter = string.Format("FusionCharts.DataStore.Operators.{0}('{1}', {2}, {3})", fx, columnName, values[0], values[1]);
+                    }
+                    break;
+                default:
+                    filter = string.Format("FusionCharts.DataStore.Operators.{0}('{1}', {2})", fx, columnName, values[0]);
+                    break;
+            }
+
+            return filter;
+        }
+
+        public void ApplyFilter(String filter)
+        {
+            if (!string.IsNullOrEmpty(filter))
+            {
+                stringBuilder.AppendLine("fusionTable = fusionTable.query(" + filter + ");");
+            }
+        }
+
+        public void ApplyFilterByCondition(String filter)
+        {
+            if (!string.IsNullOrEmpty(filter))
+            {
+                stringBuilder.AppendLine("fusionTable = fusionTable.query(" + filter + ");");
+            }
+        }
+
+        public void Pipe(params string[] filters)
+        {
+            if (filters.Length > 0)
+            {
+                string columns = string.Format("'{0}'", string.Join(", ", filters));
+                stringBuilder.AppendLine("fusionTable = fusionTable.query(FusionCharts.DataStore.Operators.pipe(" + columns + "));");
+            }
+        }
+
+        public string GetDataTable()
+        {
+            return stringBuilder.ToString();
+        }
+    }
+
+    #endregion
 }
 
 
