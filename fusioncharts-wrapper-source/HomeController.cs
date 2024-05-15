@@ -10,7 +10,7 @@ namespace FusionchartLatest.Controllers
     {
         public IActionResult Index()
         {
-            //PrintManagerHelper.EnablePrintManager(HttpContext);
+           //PrintManagerHelper.EnablePrintManager(HttpContext);
             List<Chart> chartlist = new List<Chart>();
             Chart sales = new Chart();
             

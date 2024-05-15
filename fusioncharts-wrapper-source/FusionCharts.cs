@@ -868,7 +868,7 @@ namespace InfoSoftGlobal
         //private static Hashtable __CONFIG__ = new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer());
         private static Hashtable __CONFIG__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
         private static bool __CONFIG__Initialized = false;
-        private static IHttpContextAccessor _httpContextAccessor = null;
+        private static IHttpContextAccessor _httpContextAccessor = null; 
         #region RenderALL methods
 
         /// <summary>
