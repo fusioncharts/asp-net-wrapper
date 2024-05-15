@@ -868,7 +868,7 @@ namespace InfoSoftGlobal
         //private static Hashtable __CONFIG__ = new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer());
         private static Hashtable __CONFIG__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
         private static bool __CONFIG__Initialized = false;
-
+        private static IHttpContextAccessor _httpContextAccessor = null;
         #region RenderALL methods
 
         /// <summary>
@@ -1333,15 +1333,23 @@ namespace InfoSoftGlobal
 
 
         #region Helper Private Methods
-        private static string GetHTTP()
+        private static string GetHTTP(IHttpContextAccessor httpContextAccessor)
         {
-            //Checks for protocol type.
-            string isHTTPS = HttpContext.Current.Request.ServerVariables["HTTPS"];
-            //Checks browser type.
-            bool isMSIE = HttpContext.Current.Request.ServerVariables["HTTP_USER_AGENT"].Contains("MSIE");
-            //Protocol initially sets to http.
+            var context = httpContextAccessor.HttpContext;
+            if (context == null)
+            {
+                // Handle null HttpContext
+                return "http";
+            }
+
+            // Checks for protocol type.
+            string isHTTPS = context.Request.Headers["HTTPS"];
+            // Checks browser type.
+            bool isMSIE = context.Request.Headers["User-Agent"].ToString().Contains("MSIE");
+
+            // Protocol initially set to http.
             string sHTTP = "http";
-            if (isHTTPS.ToLower() == "on")
+            if (isHTTPS?.ToLower() == "on")
             {
                 sHTTP = "https";
             }
@@ -1416,7 +1424,8 @@ namespace InfoSoftGlobal
                 Value = ds.Value.ToString();
                 if (Key.ToLower().Equals("codebase"))
                 {
-                    Value = Value.Replace("http", GetHTTP());
+                    IHttpContextAccessor httpContextAccessor = _httpContextAccessor;
+                    Value = Value.Replace("http", GetHTTP(httpContextAccessor));
                 }
                 string TFApplied = tFormat.Replace("{key}", Key);
                 TFApplied = TFApplied.Replace("{value}", Value);
