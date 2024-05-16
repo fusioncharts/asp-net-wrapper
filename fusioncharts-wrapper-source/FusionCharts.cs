@@ -1,21 +1,25 @@
 using System;
 using System.Text;
 using System.Collections;
-using System.Web.UI.WebControls;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Web;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
+
+
 
 namespace FusionCharts.Charts
 {
     /// <summary>
     /// Contains static methods to render FusionCharts in the Page. 
     /// </summary>
-    public class Chart: ICloneable
+    public class Chart : ICloneable
     {
         private Hashtable __CONFIG__ = null;
         private static Hashtable __PARAMMAP__ = null;
-        private  string events = "";
+        private string events = "";
         //private string message = "";
 
         /// <summary>
@@ -236,8 +240,8 @@ namespace FusionCharts.Charts
             string chartId = GetChartParameter("id");
             string renderAt = GetChartParameter("renderAt");
 
-           
-            
+
+
             StringBuilder builder = new StringBuilder();
             builder.AppendFormat("<!-- Using ASP.NET FusionCharts Wrapper and JavaScript rendering --><!-- START Script Block for Chart {0} -->" + Environment.NewLine, chartId);
             // if the user has provided renderAt then assume that the HTML container is already present in the page.
@@ -281,7 +285,7 @@ namespace FusionCharts.Charts
         {
             string eventHTML;
             string chartId = GetChartParameter("id");
-            eventHTML = string.Format("FusionCharts(\"{0}\").addEventListener(\"{1}\",{2});" + Environment.NewLine, chartId,eventName,funcName);
+            eventHTML = string.Format("FusionCharts(\"{0}\").addEventListener(\"{1}\",{2});" + Environment.NewLine, chartId, eventName, funcName);
             events += eventHTML;
         }
         /// <summary>
@@ -493,7 +497,7 @@ namespace FusionCharts.Charts
 
 
 
-        
+
 
         /// <summary>
         /// SetChartParameter sets various configurations of a FusionCharts instance
@@ -511,7 +515,7 @@ namespace FusionCharts.Charts
         /// </summary>
         /// <param name="param">Name of chart parameter</param>
         /// <returns>String</returns>
-       
+
         public string GetChartParameter(ChartParameter param)
         {
             return GetChartParameter(__PARAMMAP__[param.ToString()].ToString());
@@ -564,11 +568,11 @@ namespace FusionCharts.Charts
                 {
                     ((Hashtable)__CONFIG__["params"])[setting] = value;
                 }
-                
+
             }
         }
 
-        
+
         private void SetParamsMap()
         {
             if (__PARAMMAP__ == null)
@@ -580,7 +584,7 @@ namespace FusionCharts.Charts
                 __PARAMMAP__["chartHeight"] = "height";
                 __PARAMMAP__["message"] = "message";
                 __PARAMMAP__["dataFormat"] = "dataFormat";
-                __PARAMMAP__["dataSource"] = "dataSource";               
+                __PARAMMAP__["dataSource"] = "dataSource";
                 __PARAMMAP__["renderAt"] = "renderAt";
                 __PARAMMAP__["bgColor"] = "containerBackgroundColor";
                 __PARAMMAP__["bgOpacity"] = "containerBackgroundOpacity";
@@ -609,7 +613,7 @@ namespace FusionCharts.Charts
             SetParamsMap();
         }
 
-        
+
 
         /// <summary>
         /// Transform the meaning of boolean value in integer value
@@ -640,11 +644,11 @@ namespace FusionCharts.Charts
             }
             return null;
         }
-        
+
         private string fc_encodeJSON(Hashtable json, bool enclosed, TimeSeries timeSeries)
         {
             string strjson = "", Key = "", Value = "";
-            
+
             foreach (DictionaryEntry ds in json)
             {
                 if (ds.Value.ToString().Trim() != "")
@@ -666,7 +670,7 @@ namespace FusionCharts.Charts
                         }
                         else
                         {
-                            strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + timeSeries.GetDataSource() + ", ";                            
+                            strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + timeSeries.GetDataSource() + ", ";
                         }
                     }
                     else if (Key.ToLower().Equals("message"))
@@ -678,7 +682,7 @@ namespace FusionCharts.Charts
                         Value = "\"" + Value + "\"";
                         strjson = strjson + Environment.NewLine + "\"" + Key + "\" : " + Value + ", ";
                     }
-                     
+
                 }
                 else if (ds.Key.ToString().Equals("renderAt"))
                 {
@@ -868,7 +872,8 @@ namespace InfoSoftGlobal
         //private static Hashtable __CONFIG__ = new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer());
         private static Hashtable __CONFIG__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
         private static bool __CONFIG__Initialized = false;
-        private static IHttpContextAccessor _httpContextAccessor = null; 
+        private static IHttpContextAccessor _httpContextAccessor = null;
+
         #region RenderALL methods
 
         /// <summary>
@@ -954,7 +959,7 @@ namespace InfoSoftGlobal
         }
 
 
-        
+
 
         /// <summary>
         /// Renders the HTML code for the chart. This
@@ -975,7 +980,7 @@ namespace InfoSoftGlobal
         /// <param name="scaleMode">Set Scale Mode</param>
         /// <param name="language">Set SWF file Language</param>
         /// <returns></returns>
-        private static string RenderChartHTMLALL(string chartSWF, string dataUrl, string dataStr, string chartId, string chartWidth, string chartHeight, 
+        private static string RenderChartHTMLALL(string chartSWF, string dataUrl, string dataStr, string chartId, string chartWidth, string chartHeight,
             bool debugMode, bool registerWithJS, bool allowTransparent, string bgColor, string scaleMode, string language)
         {
             __INIT();
@@ -991,42 +996,42 @@ namespace InfoSoftGlobal
 
             SetConfiguration(ref __CONFIGCLONE__, "data", chartSWF);
             SetConfiguration(ref __CONFIGCLONE__, "movie", chartSWF);
-            
+
             SetConfiguration(ref __CONFIGCLONE__, "dataURL", dataUrl);
             SetConfiguration(ref __CONFIGCLONE__, "dataXML", dataStr);
 
             SetConfiguration(ref __CONFIGCLONE__, "DOMId", chartId);
             SetConfiguration(ref __CONFIGCLONE__, "id", chartId);
-            
+
             SetConfiguration(ref __CONFIGCLONE__, "width", chartWidth);
             SetConfiguration(ref __CONFIGCLONE__, "chartWidth", chartWidth);
-            
+
             SetConfiguration(ref __CONFIGCLONE__, "height", chartHeight);
             SetConfiguration(ref __CONFIGCLONE__, "chartHeight", chartHeight);
-            
+
             SetConfiguration(ref __CONFIGCLONE__, "debugMode", boolToNum(debugMode));
             SetConfiguration(ref __CONFIGCLONE__, "registerWithJS", boolToNum(true));
-            
+
             SetConfiguration(ref __CONFIGCLONE__, "wMode", wmode);
 
             SetConfiguration(ref __CONFIGCLONE__, "bgColor", bgColor);
             SetConfiguration(ref __CONFIGCLONE__, "scaleMode", scaleMode);
             SetConfiguration(ref __CONFIGCLONE__, "lang", language);
-            
+
 
             string strFlashVars = FC_Transform(GetConfigurationGroup(ref __CONFIGCLONE__, "fvars"), "&{key}={value}", true);
             SetConfiguration(ref __CONFIGCLONE__, "flashvars", strFlashVars);
 
-            string strObjectNode = FC_Transform(GetConfigurationGroup(ref __CONFIGCLONE__, "object"), " {key}=\"{value}\"", true) ;
+            string strObjectNode = FC_Transform(GetConfigurationGroup(ref __CONFIGCLONE__, "object"), " {key}=\"{value}\"", true);
             string strObjectParamsNode = FC_Transform(GetConfigurationGroup(ref __CONFIGCLONE__, "objparams"), "\t<param name=\"{key}\" value=\"{value}\">\n", true);
 
 
             StringBuilder htmlcodes = new StringBuilder();
 
             htmlcodes.AppendFormat("<!-- Using ASP.NET FusionCharts v3.2.2.1 Wrapper --><!-- START HTML Code Block for Chart {0} -->\n", chartId);
-            htmlcodes.AppendFormat("<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' {0}>\n" , strObjectNode);
+            htmlcodes.AppendFormat("<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' {0}>\n", strObjectNode);
             htmlcodes.Append(strObjectParamsNode + Environment.NewLine);
-            htmlcodes.AppendFormat("<!--[if !IE]>-->\n<object type='application/x-shockwave-flash' {0}>\n{1}</object>\n<!--<![endif]-->\n</object>\n", strObjectNode, strObjectParamsNode); 
+            htmlcodes.AppendFormat("<!--[if !IE]>-->\n<object type='application/x-shockwave-flash' {0}>\n{1}</object>\n<!--<![endif]-->\n</object>\n", strObjectNode, strObjectParamsNode);
             htmlcodes.AppendFormat("<!-- END HTML Code Block for Chart {0} -->\n", chartId);
 
             // Re-Initializing...
@@ -1221,21 +1226,28 @@ namespace InfoSoftGlobal
             string strHTML = "<script type=\"text/javascript\"><!--\n if(FusionCharts && FusionCharts.printManager) FusionCharts.printManager.enabled(true);\n// --></script>";
             return (strHTML);
         }
-        
-        
+
+
         /// <summary>
         /// Enables Print Manager for Mozilla browsers
         /// </summary>
         /// <param name="CurrentPage">Current page reference</param>
         [Obsolete("")]
-        public static void EnablePrintManager(object CurrentPage)
+        public static void EnablePrintManager(HttpContext httpContext)
         {
-            System.Web.UI.Page HostPage;
-            HostPage = (System.Web.UI.Page)CurrentPage;
-            string strHTML = "<script type=\"text/javascript\"><!--\n if(FusionCharts && FusionCharts.printManager) FusionCharts.printManager.enabled(true);\n// --></script>";
-            HostPage.ClientScript.RegisterClientScriptBlock(HostPage.GetType(), "", strHTML);
+            var response = httpContext.Response;
+
+            string script = @"
+            <script type='text/javascript'>
+                if (FusionCharts && FusionCharts.printManager) {
+                    FusionCharts.printManager.enabled(true);
+                }
+            </script>";
+
+            response.Headers.Add("X-Print-Manager-Script", script);
         }
-        
+
+
 
         private static void __INIT()
         {
@@ -1355,7 +1367,6 @@ namespace InfoSoftGlobal
             }
             return sHTTP;
         }
-
         /// <summary>
         /// Transform the meaning of boolean value in integer value
         /// </summary>
