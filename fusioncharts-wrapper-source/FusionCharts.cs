@@ -1,7 +1,8 @@
 using System;
 using System.Text;
 using System.Collections;
-using System.Web.UI.WebControls;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Web;
 using System.Collections.Generic;
 using System.Globalization;
@@ -1228,14 +1229,17 @@ namespace InfoSoftGlobal
         /// </summary>
         /// <param name="CurrentPage">Current page reference</param>
         [Obsolete("")]
-        public static void EnablePrintManager(object CurrentPage)
+        public static void EnablePrintManager(HttpContext httpContext)
         {
-            System.Web.UI.Page HostPage;
-            HostPage = (System.Web.UI.Page)CurrentPage;
-            string strHTML = "<script type=\"text/javascript\"><!--\n if(FusionCharts && FusionCharts.printManager) FusionCharts.printManager.enabled(true);\n// --></script>";
-            HostPage.ClientScript.RegisterClientScriptBlock(HostPage.GetType(), "", strHTML);
+            var response = httpContext.Response;
+            string script = @"
+            <script type='text/javascript'>
+                if (FusionCharts && FusionCharts.printManager) {
+                    FusionCharts.printManager.enabled(true);
+                }
+            </script>";
+            response.Headers.Add("X-Print-Manager-Script", script);
         }
-        
 
         private static void __INIT()
         {
