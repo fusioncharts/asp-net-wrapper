@@ -1,7 +1,8 @@
 using System;
 using System.Text;
 using System.Collections;
-using System.Web.UI.WebControls;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Web;
 using System.Collections.Generic;
 using System.Globalization;
@@ -868,7 +869,7 @@ namespace InfoSoftGlobal
         //private static Hashtable __CONFIG__ = new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer());
         private static Hashtable __CONFIG__ = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
         private static bool __CONFIG__Initialized = false;
-
+        private static IHttpContextAccessor _httpContextAccessor = null; 
         #region RenderALL methods
 
         /// <summary>
@@ -1228,14 +1229,17 @@ namespace InfoSoftGlobal
         /// </summary>
         /// <param name="CurrentPage">Current page reference</param>
         [Obsolete("")]
-        public static void EnablePrintManager(object CurrentPage)
+        public static void EnablePrintManager(HttpContext httpContext)
         {
-            System.Web.UI.Page HostPage;
-            HostPage = (System.Web.UI.Page)CurrentPage;
-            string strHTML = "<script type=\"text/javascript\"><!--\n if(FusionCharts && FusionCharts.printManager) FusionCharts.printManager.enabled(true);\n// --></script>";
-            HostPage.ClientScript.RegisterClientScriptBlock(HostPage.GetType(), "", strHTML);
+            var response = httpContext.Response;
+            string script = @"
+            <script type='text/javascript'>
+                if (FusionCharts && FusionCharts.printManager) {
+                    FusionCharts.printManager.enabled(true);
+                }
+            </script>";
+            response.Headers.Add("X-Print-Manager-Script", script);
         }
-        
 
         private static void __INIT()
         {
@@ -1333,15 +1337,23 @@ namespace InfoSoftGlobal
 
 
         #region Helper Private Methods
-        private static string GetHTTP()
+        private static string GetHTTP(IHttpContextAccessor httpContextAccessor)
         {
-            //Checks for protocol type.
-            string isHTTPS = HttpContext.Current.Request.ServerVariables["HTTPS"];
-            //Checks browser type.
-            bool isMSIE = HttpContext.Current.Request.ServerVariables["HTTP_USER_AGENT"].Contains("MSIE");
-            //Protocol initially sets to http.
+            var context = httpContextAccessor.HttpContext;
+            if (context == null)
+            {
+                // Handle null HttpContext
+                return "http";
+            }
+
+            // Checks for protocol type.
+            string isHTTPS = context.Request.Headers["HTTPS"];
+            // Checks browser type.
+            bool isMSIE = context.Request.Headers["User-Agent"].ToString().Contains("MSIE");
+
+            // Protocol initially set to http.
             string sHTTP = "http";
-            if (isHTTPS.ToLower() == "on")
+            if (isHTTPS?.ToLower() == "on")
             {
                 sHTTP = "https";
             }
@@ -1416,7 +1428,8 @@ namespace InfoSoftGlobal
                 Value = ds.Value.ToString();
                 if (Key.ToLower().Equals("codebase"))
                 {
-                    Value = Value.Replace("http", GetHTTP());
+                    IHttpContextAccessor httpContextAccessor = _httpContextAccessor;
+                    Value = Value.Replace("http", GetHTTP(httpContextAccessor));
                 }
                 string TFApplied = tFormat.Replace("{key}", Key);
                 TFApplied = TFApplied.Replace("{value}", Value);
