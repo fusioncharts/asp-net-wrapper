@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FusionCharts.AspNetWrapper</id>
+    <version>1.0.0-beta.1</version>
+    <authors>FusionCharts</authors>
+    <owners>FusionCharts</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>ASP.NET FusionCharts wrapper to integrate the .NET application with FusionCharts</description>
+    <tags>FusionCharts ASP.NET Charts</tags>
+    <license type="file">LICENSE.md</license>
+    <readme>README.md</readme>
+  </metadata>
+  <files>
+    <file src=".\fusioncharts-wrapper-assembly\FusionCharts.dll" target="lib\net80\FusionCharts.dll" />
+	  <file src=".\fusioncharts-wrapper-assembly\FusionCharts.xml" target="lib\net80\FusionCharts.xml" />
+	  <file src="README.md" target="README.md" />
+	  <file src="LICENSE.md" target="LICENSE.md" />
+  </files>
+</package>
