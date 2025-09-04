@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FusionCharts.AspNetWrapper</id>
+    <version>1.0.0</version>
+    <authors>Meher Howji</authors>
+    <owners>FusionCharts</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>
+      Official FusionCharts ASP.NET wrapper to seamlessly integrate interactive charts, gauges, and dashboards into your .NET applications.
+    </description>
+    <tags>FusionCharts ASP.NET Charts Wrapper Visualization Dashboard</tags>
+    <projectUrl>https://www.fusioncharts.com/</projectUrl>
+    <repository type="git" url="https://github.com/fusioncharts/asp-net-wrapper" />
+    <license type="file">LICENSE.md</license>
+    <readme>README.md</readme>
+  </metadata>
+
+  <files>
+    <file src=".\fusioncharts-wrapper-assembly\FusionCharts.dll" target="lib\net80\FusionCharts.dll" />
+	  <file src=".\fusioncharts-wrapper-assembly\FusionCharts.xml" target="lib\net80\FusionCharts.xml" />
+	  <file src="README.md" target="README.md" />
+	  <file src="LICENSE.md" target="LICENSE.md" />
+  </files>
+</package>
